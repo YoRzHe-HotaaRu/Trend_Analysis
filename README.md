@@ -89,7 +89,7 @@
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/kv-transit-analytics.git
+   git clone https://github.com/YoRzHe-HotaaRu/kv-transit-analytics.git
    cd kv-transit-analytics
    ```
 
