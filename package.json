@@ -1,0 +1,75 @@
+{
+  "name": "klang-valley-transit-analytics",
+  "version": "1.0.0",
+  "description": "Advanced transportation and attractions visualization platform for Klang Valley with real-time analytics and interactive mapping",
+  "type": "module",
+  "author": {
+    "name": "Amir Hafizi Bin Musa",
+    "email": "amir.hafizi.uitm@student.com",
+    "affiliation": "UiTM Computer Science Student"
+  },
+  "keywords": [
+    "klang-valley",
+    "transit",
+    "analytics",
+    "transportation",
+    "visualization",
+    "mapping",
+    "real-time",
+    "malaysia",
+    "react",
+    "mui",
+    "leaflet"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/kv-transit-analytics"
+  },
+  "homepage": "https://kv-transit-analytics.netlify.app",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint src --ext js,jsx,ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "format": "prettier --write src/**/*.{js,jsx,ts,tsx,css,md}"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-leaflet": "^4.2.1",
+    "leaflet": "^1.9.4",
+    "@mui/material": "^5.14.18",
+    "@mui/icons-material": "^5.14.18",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "chart.js": "^4.4.0",
+    "react-chartjs-2": "^5.2.0",
+    "axios": "^1.6.0",
+    "react-query": "^3.39.3",
+    "date-fns": "^2.30.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "@vitejs/plugin-react": "^4.2.0",
+    "vite": "^5.0.2",
+    "eslint": "^8.53.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.4",
+    "prettier": "^3.1.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

@@ -1,0 +1,247 @@
+import logging
+import math
+from geopy.distance import geodesic
+from collections import defaultdict
+
+logger = logging.getLogger(__name__)
+
+class SpatialProcessor:
+    """Service for processing spatial/geographic data"""
+    
+    def __init__(self):
+        self.logger = logging.getLogger(self.__class__.__name__)
+    
+    def calculate_distance(self, lat1, lon1, lat2, lon2, unit='km'):
+        """Calculate distance between two geographic points"""
+        try:
+            point1 = (lat1, lon1)
+            point2 = (lat2, lon2)
+            
+            distance = geodesic(point1, point2).kilometers
+            
+            if unit == 'm':
+                return distance * 1000
+            elif unit == 'mi':
+                return distance * 0.621371
+            else:  # km
+                return distance
+                
+        except Exception as e:
+            self.logger.error(f"Error calculating distance: {e}")
+            return None
+    
+    def find_nearest_locations(self, target_lat, target_lng, locations, max_distance=5.0):
+        """Find locations nearest to a target point within max distance"""
+        try:
+            nearest = []
+            
+            for location in locations:
+                distance = self.calculate_distance(
+                    target_lat, target_lng,
+                    location['latitude'], location['longitude']
+                )
+                
+                if distance and distance <= max_distance:
+                    location['distance_km'] = distance
+                    nearest.append(location)
+            
+            # Sort by distance
+            nearest.sort(key=lambda x: x['distance_km'])
+            
+            return nearest
+            
+        except Exception as e:
+            self.logger.error(f"Error finding nearest locations: {e}")
+            return []
+    
+    def create_spatial_grid(self, bounds, grid_size=0.01):
+        """Create a spatial grid for heat map analysis"""
+        try:
+            min_lat, min_lng, max_lat, max_lng = bounds
+            
+            grid_cells = []
+            current_lat = min_lat
+            
+            while current_lat < max_lat:
+                current_lng = min_lng
+                
+                while current_lng < max_lng:
+                    grid_cells.append({
+                        'lat': current_lat,
+                        'lng': current_lng,
+                        'lat_end': current_lat + grid_size,
+                        'lng_end': current_lng + grid_size,
+                        'center_lat': current_lat + grid_size / 2,
+                        'center_lng': current_lng + grid_size / 2,
+                        'density': 0
+                    })
+                    current_lng += grid_size
+                
+                current_lat += grid_size
+            
+            return grid_cells
+            
+        except Exception as e:
+            self.logger.error(f"Error creating spatial grid: {e}")
+            return []
+    
+    def calculate_spatial_density(self, points, bounds, grid_size=0.01):
+        """Calculate spatial density of points using grid method"""
+        try:
+            grid = self.create_spatial_grid(bounds, grid_size)
+            
+            # Count points in each grid cell
+            for point in points:
+                lat, lng = point['latitude'], point['longitude']
+                
+                for cell in grid:
+                    if (cell['lat'] <= lat < cell['lat_end'] and
+                        cell['lng'] <= lng < cell['lng_end']):
+                        cell['density'] += 1
+                        break
+            
+            # Calculate density metrics
+            densities = [cell['density'] for cell in grid if cell['density'] > 0]
+            
+            if not densities:
+                return {
+                    'max_density': 0,
+                    'avg_density': 0,
+                    'total_cells_with_points': 0,
+                    'grid_cells': grid
+                }
+            
+            return {
+                'max_density': max(densities),
+                'avg_density': sum(densities) / len(densities),
+                'total_cells_with_points': len(densities),
+                'total_points': sum(densities),
+                'grid_cells': grid
+            }
+            
+        except Exception as e:
+            self.logger.error(f"Error calculating spatial density: {e}")
+            return {'max_density': 0, 'avg_density': 0, 'total_cells_with_points': 0, 'grid_cells': []}
+    
+    def group_by_proximity(self, locations, proximity_threshold=0.5):
+        """Group locations by proximity to identify clusters"""
+        try:
+            if not locations:
+                return []
+            
+            clusters = []
+            processed = set()
+            
+            for i, location in enumerate(locations):
+                if i in processed:
+                    continue
+                
+                cluster = [location]
+                processed.add(i)
+                
+                # Find nearby locations
+                for j, other_location in enumerate(locations):
+                    if j in processed or i == j:
+                        continue
+                    
+                    distance = self.calculate_distance(
+                        location['latitude'], location['longitude'],
+                        other_location['latitude'], other_location['longitude']
+                    )
+                    
+                    if distance and distance <= proximity_threshold:
+                        cluster.append(other_location)
+                        processed.add(j)
+                
+                clusters.append({
+                    'cluster_id': len(clusters),
+                    'locations': cluster,
+                    'center_lat': sum(loc['latitude'] for loc in cluster) / len(cluster),
+                    'center_lng': sum(loc['longitude'] for loc in cluster) / len(cluster),
+                    'size': len(cluster)
+                })
+            
+            # Sort clusters by size (largest first)
+            clusters.sort(key=lambda x: x['size'], reverse=True)
+            
+            return clusters
+            
+        except Exception as e:
+            self.logger.error(f"Error grouping by proximity: {e}")
+            return []
+    
+    def get_spatial_bounds(self, locations):
+        """Get the bounding box for a set of locations"""
+        try:
+            if not locations:
+                return None
+            
+            lats = [loc['latitude'] for loc in locations]
+            lngs = [loc['longitude'] for loc in locations]
+            
+            return {
+                'min_lat': min(lats),
+                'max_lat': max(lats),
+                'min_lng': min(lngs),
+                'max_lng': max(lngs),
+                'center_lat': sum(lats) / len(lats),
+                'center_lng': sum(lngs) / len(lngs)
+            }
+            
+        except Exception as e:
+            self.logger.error(f"Error getting spatial bounds: {e}")
+            return None
+    
+    def calculate_spatial_statistics(self, locations):
+        """Calculate spatial statistics for a set of locations"""
+        try:
+            if not locations:
+                return {}
+            
+            bounds = self.get_spatial_bounds(locations)
+            if not bounds:
+                return {}
+            
+            # Calculate distances from center
+            distances = []
+            for location in locations:
+                distance = self.calculate_distance(
+                    bounds['center_lat'], bounds['center_lng'],
+                    location['latitude'], location['longitude']
+                )
+                if distance:
+                    distances.append(distance)
+            
+            if not distances:
+                return {'bounds': bounds}
+            
+            return {
+                'bounds': bounds,
+                'total_locations': len(locations),
+                'area_km2': self._calculate_area_km2(bounds),
+                'avg_distance_from_center': sum(distances) / len(distances),
+                'max_distance_from_center': max(distances),
+                'min_distance_from_center': min(distances),
+                'density_per_km2': len(locations) / self._calculate_area_km2(bounds) if self._calculate_area_km2(bounds) > 0 else 0
+            }
+            
+        except Exception as e:
+            self.logger.error(f"Error calculating spatial statistics: {e}")
+            return {}
+    
+    def _calculate_area_km2(self, bounds):
+        """Calculate approximate area in square kilometers"""
+        try:
+            # Rough calculation using lat/lng differences
+            lat_diff = bounds['max_lat'] - bounds['min_lat']
+            lng_diff = bounds['max_lng'] - bounds['min_lng']
+            
+            # Convert to km (rough approximation)
+            lat_km = lat_diff * 111  # 1 degree lat ≈ 111 km
+            lng_km = lng_diff * 111 * math.cos(math.radians(bounds['center_lat']))  # adjust for longitude
+            
+            return abs(lat_km * lng_km)
+            
+        except Exception as e:
+            self.logger.error(f"Error calculating area: {e}")
+            return 0

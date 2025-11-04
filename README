@@ -1,0 +1,344 @@
+# Klang Valley Transit & Attractions Visualization
+
+A web-based spatio-temporal visualization and trend analysis system for transit and attractions in Klang Valley, Malaysia using React frontend and Flask backend.
+
+## 🚀 Features
+
+### Real-time Visualization
+- **Interactive Map**: Live visualization of transit stations and attractions
+- **Multi-Source Data**: Integrates data from Grab, Google Places, Foursquare, and OpenStreetMap
+- **Temporal Controls**: Time-based filtering (real-time, last hour, today, last week, last month)
+- **Live Statistics**: Real-time dashboard with transit performance metrics
+
+### Trend Analysis
+- **Historical Trends**: Multi-period trend analysis (hourly, daily, weekly, monthly)
+- **Pattern Recognition**: Peak hour analysis and usage pattern detection
+- **Correlation Analysis**: Relationship between transit usage and attraction footfall
+- **Performance Metrics**: System efficiency and on-time performance tracking
+
+### Data Sources
+- **Transit Systems**: LRT, MRT, BRT, KTM Komuter
+- **Attractions**: Shopping malls, restaurants, entertainment venues, landmarks
+- **External APIs**: Grab ride-hailing, Google Places, Foursquare, OpenStreetMap
+- **Caching**: Redis-based caching for performance optimization
+
+## 📋 System Requirements
+
+- **Node.js**: 16.x or higher
+- **Python**: 3.8 or higher
+- **Redis**: 6.x or higher (optional, falls back to memory cache)
+- **Database**: SQLite (development) / PostgreSQL (production)
+
+## 🛠️ Installation
+
+### Frontend Setup (React + Vite)
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+### Backend Setup (Flask)
+
+```bash
+# Navigate to backend directory
+cd backend
+
+# Create virtual environment
+python -m venv venv
+
+# Activate virtual environment
+# On Windows:
+venv\\Scripts\\activate
+# On macOS/Linux:
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Set environment variables (optional)
+# Create .env file in backend directory:
+# FLASK_APP=app.py
+# FLASK_ENV=development
+# DATABASE_URL=sqlite:///klang_valley.db
+# GOOGLE_PLACES_API_KEY=your_api_key_here
+# GRAB_API_KEY=your_api_key_here
+# FOURSQUARE_CLIENT_ID=your_client_id_here
+# FOURSQUARE_CLIENT_SECRET=your_client_secret_here
+# REDIS_URL=redis://localhost:6379
+
+# Start Flask development server
+python app.py
+```
+
+## 🚦 Running the Application
+
+### Development Mode
+
+1. **Start Backend** (Terminal 1):
+   ```bash
+   cd backend
+   python app.py
+   ```
+   Backend runs on: http://localhost:5000
+
+2. **Start Frontend** (Terminal 2):
+   ```bash
+   npm run dev
+   ```
+   Frontend runs on: http://localhost:3000
+
+### Production Mode
+
+1. **Build Frontend**:
+   ```bash
+   npm run build
+   ```
+
+2. **Start Backend with Gunicorn**:
+   ```bash
+   cd backend
+   gunicorn -w 4 -b 0.0.0.0:5000 app:app
+   ```
+
+## 📊 API Endpoints
+
+### Transit Endpoints
+- `GET /api/transit/real-time` - Real-time transit data
+- `GET /api/transit/stations` - Transit stations with filtering
+- `GET /api/transit/status` - Current transit system status
+
+### Attraction Endpoints  
+- `GET /api/attractions/active` - Active attractions by time range
+- `GET /api/attractions/search` - Search attractions by query/category
+- `GET /api/attractions/popularity` - Attraction popularity metrics
+
+### Analysis Endpoints
+- `GET /api/analysis/trends` - Trend analysis data
+- `GET /api/analysis/patterns` - Usage pattern analysis
+- `GET /api/analysis/correlations` - Transit-attraction correlations
+
+### Dashboard Endpoints
+- `GET /api/dashboard/stats` - Real-time dashboard statistics
+- `GET /api/dashboard/summary` - System summary
+- `GET /api/dashboard/alerts` - Current alerts and notifications
+
+## 🏗️ Architecture
+
+### Frontend Architecture
+```
+src/
+├── components/
+│   ├── Map/
+│   │   ├── InteractiveMap.jsx        # Main map component
+│   │   ├── TransitLayer.jsx          # Transit stations overlay
+│   │   ├── AttractionLayer.jsx       # Attractions overlay
+│   │   └── TemporalController.jsx    # Time-based controls
+│   ├── Dashboard/
+│   │   ├── TrendCharts.jsx           # Trend visualizations
+│   │   └── RealTimeStats.jsx         # Live statistics
+│   └── UI/
+│       └── ThemeProvider.jsx         # Light theme config
+├── hooks/
+│   └── useDataFetch.js               # API integration hooks
+└── services/
+    └── apiService.js                 # Backend communication
+```
+
+### Backend Architecture
+```
+backend/
+├── api/
+│   ├── routes/
+│   │   ├── transit_routes.py         # Transit endpoints
+│   │   ├── attraction_routes.py      # Attraction endpoints
+│   │   ├── analysis_routes.py        # Analysis endpoints
+│   │   └── dashboard_routes.py       # Dashboard endpoints
+│   └── services/
+│       └── temporal_processing.py    # Time-series processing
+├── external_apis/
+│   ├── grab_api.py                   # Grab API integration
+│   ├── google_places.py              # Google Places API
+│   ├── foursquare_api.py             # Foursquare API
+│   └── osm_api.py                    # OpenStreetMap API
+├── models/
+│   └── database.py                   # Database models
+└── utils/
+    └── data_cache.py                 # Redis/memory caching
+```
+
+## 🔧 Configuration
+
+### Environment Variables
+
+Create a `.env` file in the `backend/` directory:
+
+```env
+# Flask Configuration
+FLASK_APP=app.py
+FLASK_ENV=development
+SECRET_KEY=your_secret_key_here
+
+# Database Configuration
+DATABASE_URL=sqlite:///klang_valley.db
+
+# External API Keys
+GOOGLE_PLACES_API_KEY=your_google_places_api_key
+GRAB_API_KEY=your_grab_api_key
+FOURSQUARE_CLIENT_ID=your_foursquare_client_id
+FOURSQUARE_CLIENT_SECRET=your_foursquare_client_secret
+
+# Caching Configuration
+REDIS_URL=redis://localhost:6379
+
+# Frontend Configuration
+FRONTEND_URL=http://localhost:3000
+```
+
+### API Keys Setup
+
+1. **Google Places API**:
+   - Get API key from [Google Cloud Console](https://console.cloud.google.com/)
+   - Enable Places API, Geocoding API, and Maps JavaScript API
+
+2. **Grab API**:
+   - Register at [Grab Developer Portal](https://developer.grab.com/)
+   - Obtain API credentials for ride-hailing data
+
+3. **Foursquare API**:
+   - Sign up at [Foursquare for Developers](https://developer.foursquare.com/)
+   - Create app to get Client ID and Client Secret
+
+## 🗺️ Geographic Coverage
+
+### Klang Valley Coverage Area
+- **Kuala Lumpur**: City center, KLCC, Bukit Bintang, Chinatown
+- **Selangor**: Shah Alam, Subang Jaya, Petaling Jaya, Klang
+- **Transit Coverage**: All LRT, MRT, BRT, and KTM Komuter lines
+- **Attraction Focus**: Shopping malls, restaurants, entertainment venues, landmarks
+
+### Key Areas Tracked
+- **KLCC & City Center**: High-density shopping and business district
+- **Bukit Bintang**: Shopping and entertainment hub
+- **KL Sentral**: Major transit interchange
+- **Mid Valley Megamall**: Large-scale retail complex
+- **Batu Caves**: Tourist landmark and heritage site
+
+## 📈 Performance & Scalability
+
+### Caching Strategy
+- **Redis Cache**: Production-level caching with configurable TTL
+- **Memory Cache**: Development fallback with automatic cleanup
+- **API Caching**: Intelligent cache invalidation and refresh
+
+### Real-time Updates
+- **WebSocket Ready**: Framework for real-time data streaming
+- **Refresh Intervals**: Configurable update frequencies by data type
+- **Rate Limiting**: Built-in protection against API abuse
+
+### Database Optimization
+- **Spatial Indexing**: Geospatial queries optimized for location-based data
+- **Time-series Partitioning**: Historical data organized by time periods
+- **Connection Pooling**: Efficient database connection management
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+1. **CORS Errors**:
+   - Ensure backend runs on port 5000
+   - Check FRONTEND_URL environment variable
+
+2. **API Connection Errors**:
+   - Verify API keys are correctly configured
+   - Check internet connection and API service status
+
+3. **Database Errors**:
+   - Ensure write permissions for database file
+   - Run database initialization: `python -c "from models.database import init_db; init_db()"`
+
+4. **Frontend Build Errors**:
+   - Clear node_modules and reinstall: `rm -rf node_modules && npm install`
+   - Check Node.js version compatibility
+
+### Development Tools
+
+```bash
+# Backend testing
+python -m pytest backend/tests/
+
+# Frontend linting
+npm run lint
+
+# Backend linting
+pylint backend/
+
+# Database migrations (when implemented)
+flask db upgrade
+```
+
+## 📚 Technologies Used
+
+### Frontend
+- **React 18** with functional components and hooks
+- **Vite** for fast development and building
+- **Material-UI** for beautiful, accessible components
+- **Leaflet** for interactive mapping
+- **Chart.js** for data visualizations
+- **React Query** for efficient data fetching
+
+### Backend
+- **Flask** web framework
+- **SQLAlchemy** ORM with SQLite/PostgreSQL support
+- **Flask-CORS** for cross-origin requests
+- **Flask-Limiter** for rate limiting
+- **Redis** for caching
+- **Pandas** for data analysis
+
+### External APIs
+- **Grab API** for ride-hailing data
+- **Google Places API** for attraction information
+- **Foursquare API** for venue data
+- **OpenStreetMap** for geocoding and mapping
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'Add amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
+
+## 📞 Support
+
+For questions and support:
+- Create an issue in the GitHub repository
+- Check the troubleshooting section above
+- Review the API documentation
+
+## 🗺️ Future Enhancements
+
+- **Real-time Chat**: Integration with live transit updates
+- **Mobile App**: React Native mobile application
+- **Predictive Analytics**: Machine learning for demand forecasting
+- **Multi-language Support**: Bahasa Malaysia and Chinese language options
+- **Offline Mode**: Progressive Web App with offline capabilities
+- **Social Features**: User reviews and ratings for attractions
+- **Route Planning**: Integration with transit route planning APIs
+
+---
+
+**Built with ❤️ for the Klang Valley community**
