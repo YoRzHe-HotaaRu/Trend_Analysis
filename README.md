@@ -17,7 +17,6 @@
 
 - [Overview](#-overview)
 - [🎯 Features](#-features)
-- [🚀 Live Demo](#-live-demo)
 - [🛠️ Technology Stack](#️-technology-stack)
 - [⚡ Quick Start](#️-quick-start)
 - [📁 Project Structure](#-project-structure)
@@ -60,14 +59,6 @@
 - **Flexible Time Ranges**: Real-time, hourly, daily, weekly, and monthly views
 - **Custom Date Selection**: Choose specific dates for historical analysis
 - **Dynamic Updates**: Automatic data refresh based on selected time range
-
-## 🚀 Live Demo
-
-<div align="center">
-
-**[🚀 View Live Application](https://kv-transit-analytics.netlify.app)**
-
-*Interactive demo showcasing real-time Klang Valley transit analytics*
 
 </div>
 
@@ -220,8 +211,8 @@ Development: http://localhost:5000/api
 *UiTM Computer Science Student*
 
 [![📧 Email](https://img.shields.io/badge/Email-amir.hafizi.uitm%40student.com-blue?style=for-the-badge&logo=gmail&logoColor=white)](mailto:amir.hafizi.uitm@student.com)
-[![💼 LinkedIn](https://img.shields.io/badge/LinkedIn-Amir%20Hafizi%20Bin%20Musa-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/amirhafizi)
-[![🐙 GitHub](https://img.shields.io/badge/GitHub-@amirhafizi-333?style=for-the-badge&logo=github&logoColor=white)](https://github.com/amirhafizi)
+[![💼 LinkedIn](https://img.shields.io/badge/LinkedIn-amir-hafizi-musa-5530b9364?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/amir-hafizi-musa-5530b9364/)
+[![🐙 GitHub](https://img.shields.io/badge/GitHub-@YoRzHe-HotaaRu?style=for-the-badge&logo=github&logoColor=white)](https://github.com/amirhafizi)
 
 </div>
 
@@ -229,7 +220,7 @@ Development: http://localhost:5000/api
 - **Institution**: Universiti Teknologi MARA (UiTM)
 - **Program**: Bachelor of Computer Science (Hons.)
 - **Year**: 2025
-- **Specialization**: Software Engineering & Web Development
+- **Specialization**: LLMs & Web Development
 
 ### 🏆 Skills Demonstrated
 - **Frontend Development**: React, Material-UI, Responsive Design
