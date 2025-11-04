@@ -89,8 +89,8 @@
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/YoRzHe-HotaaRu/kv-transit-analytics.git
-   cd kv-transit-analytics
+   git clone https://github.com/YoRzHe-HotaaRu/Trend_Analysis.git
+   cd Trend_Analysis
    ```
 
 2. **Setup Frontend**
